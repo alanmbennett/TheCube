@@ -7,7 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E7E160982253C15F007B4354 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = E7E160972253C15F007B4354 /* main.c */; };
+		E7E1BFF92255729700F6DFB0 /* cube.c in Sources */ = {isa = PBXBuildFile; fileRef = E7E1BFF82255729700F6DFB0 /* cube.c */; };
+		E7E1BFFB225572DA00F6DFB0 /* wizard.c in Sources */ = {isa = PBXBuildFile; fileRef = E7E1BFFA225572DA00F6DFB0 /* wizard.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -24,7 +25,10 @@
 
 /* Begin PBXFileReference section */
 		E7E160942253C15F007B4354 /* TheCube */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = TheCube; sourceTree = BUILT_PRODUCTS_DIR; };
-		E7E160972253C15F007B4354 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
+		E7E1BFF42255728700F6DFB0 /* wizard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = wizard.h; sourceTree = "<group>"; };
+		E7E1BFF72255729300F6DFB0 /* cube.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = cube.h; path = "/Users/Alan/Documents/USF/2019/Spring_2019/COP 4600/Project 3/TheCube/TheCube/cube.h"; sourceTree = "<absolute>"; };
+		E7E1BFF82255729700F6DFB0 /* cube.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = cube.c; path = "/Users/Alan/Documents/USF/2019/Spring_2019/COP 4600/Project 3/TheCube/TheCube/cube.c"; sourceTree = "<absolute>"; };
+		E7E1BFFA225572DA00F6DFB0 /* wizard.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = wizard.c; path = "/Users/Alan/Documents/USF/2019/Spring_2019/COP 4600/Project 3/TheCube/TheCube/wizard.c"; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,7 +61,10 @@
 		E7E160962253C15F007B4354 /* TheCube */ = {
 			isa = PBXGroup;
 			children = (
-				E7E160972253C15F007B4354 /* main.c */,
+				E7E1BFFA225572DA00F6DFB0 /* wizard.c */,
+				E7E1BFF72255729300F6DFB0 /* cube.h */,
+				E7E1BFF82255729700F6DFB0 /* cube.c */,
+				E7E1BFF42255728700F6DFB0 /* wizard.h */,
 			);
 			path = TheCube;
 			sourceTree = "<group>";
@@ -118,7 +125,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E7E160982253C15F007B4354 /* main.c in Sources */,
+				E7E1BFFB225572DA00F6DFB0 /* wizard.c in Sources */,
+				E7E1BFF92255729700F6DFB0 /* cube.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
