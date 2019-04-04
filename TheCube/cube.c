@@ -234,7 +234,7 @@ interface(void *cube_ref)
               
               for(i = 0; i < cube->teamB_size; i++)
               {
-                  pthread_create(&teamB_pids[i], NULL, wizard_func, cube->teamB_wizards[0]);
+                  pthread_create(&teamB_pids[i], NULL, wizard_func, cube->teamB_wizards[i]);
               }
           }
       }
