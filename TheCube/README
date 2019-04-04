@@ -1,0 +1,17 @@
+Note for Anthony: 
+	- DO NOT RUN IN XCODE, it won't work since the program needs
+	to run with some libraries that must be specified on the Linux
+	command-line. 
+	- Just edit the .c files on your computer and then connect to the C4
+	Lab Linux machines via SSH and test your code there. To transfer your 
+	files to the C4 machine, connect to it with FileZilla and drop it in
+	the desired directory.
+	- Once you have verified that your changes are running correctly or
+	whatever, push your code on your computer to the GitHub repo via 
+	GitHub Desktop.
+
+To run:
+	- On the Linux command-line, build the executable by typing in the 
+	"make" command so the makefile will build it.
+	- Then type in "./cube" to run it. Be sure to remember the command-line
+	arguments too!
