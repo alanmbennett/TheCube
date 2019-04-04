@@ -185,7 +185,7 @@ interface(void *cube_ref)
 
   using_history();
   while (1)
-    {
+  {
       line = readline("cube> ");
       if (line == NULL) continue;
       if (strlen(line) == 0) continue;
@@ -197,47 +197,59 @@ interface(void *cube_ref)
       
       command = &line[i];
       if (!strcmp(command, "exit"))
-	{
-	  return 0;
-	}
+      {
+          return 0;
+      }
       else if (!strcmp(command, "show"))
-	{
-	  print_cube(cube);
-	}
+      {
+          print_cube(cube);
+      }
       else if (!strcmp(command, "start"))
-	{
-	  if (cube->game_status == 1)
-	    {
-	      fprintf(stderr, "Game is over. Cannot be started again\n");
-	    }
-	  else if (cube->game_status == 0)
-	    {
-	      fprintf(stderr, "Game is in progress. Cannot be started again\n");
-	    }
-	  else
-	    {
-	      cube->game_status = 0;
-	      
-	      /* Start the game */
-
-	      /* Fill in */
-
-
-
-	    }
-	}
+      {
+          if (cube->game_status == 1)
+          {
+              fprintf(stderr, "Game is over. Cannot be started again\n");
+          }
+          else if (cube->game_status == 0)
+          {
+              fprintf(stderr, "Game is in progress. Cannot be started again\n");
+          }
+          else
+          {
+              cube->game_status = 0;
+              /* Start the game */
+              /* Fill in */
+              
+              /* Arrays holding PIDs for all threads */
+              pthread_t teamA_pids[cube->teamA_size];
+              pthread_t teamB_pids[cube->teamB_size];
+              
+              /* Spawn all the wizard threads */
+              int i;
+              
+              for(i = 0; i < cube->teamA_size; i++)
+              {
+                  pthread_create(&teamA_pids[i], NULL, wizard_func, cube->teamA_wizards[i]);
+              }
+              
+              for(i = 0; i < cube->teamB_size; i++)
+              {
+                  pthread_create(&teamB_pids[i], NULL, wizard_func, cube->teamB_wizards[0]);
+              }
+          }
+      }
       else if (!strcmp(command, "stop"))
-	{
-	  /* Stop the game */
-	  return 1;
-	}
+      {
+          /* Stop the game */
+          return 1;
+      }
       else
-	{
-	  fprintf(stderr, "unknown command %s\n", command);
-	}
+      {
+          fprintf(stderr, "unknown command %s\n", command);
+      }
 
       free(line);
-    }
+  }
 
   return 0;
 }
