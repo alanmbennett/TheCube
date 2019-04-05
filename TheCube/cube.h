@@ -1,5 +1,6 @@
 #ifndef _CUBE_H
 #define _CUBE_H
+#include <semaphore.h>
 
 #define SOLUTION
 
@@ -22,6 +23,7 @@ struct room {
   struct wizard *wizards[2];
 
   /* Fill in as required */
+  sem_t sem_room;
 };
 
 struct cube {

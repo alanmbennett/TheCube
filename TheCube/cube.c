@@ -388,6 +388,7 @@ main(int argc, char** argv)
 	  room_col[j] = room;
 
 	  /* Fill in */
+    sem_init(&room->sem_room, 0, 1);
 
 	}
       
@@ -474,10 +475,13 @@ choose_room(struct wizard* w)
 int 
 try_room(struct wizard *w, struct room *oldroom, struct room* newroom)
 {
-
   /* Fill in */
+  if(newroom->wizards[0] != NULL)
+    return 0; // not full
+  else if(newroom->wizards[1] != NULL)
+    return 0; // not full
 
-  return 1;
+  return 1; // is full
   
 }
 

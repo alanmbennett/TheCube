@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <pthread.h>
 #include <assert.h>
+#include <semaphore.h>
 
 #include "cube.h"
 #include "wizard.h"
@@ -14,7 +15,6 @@ wizard_func(void *wizard_descr)
   struct room *oldroom;
   struct wizard* self;
   struct wizard* other;
-
 
   self = (struct wizard*)wizard_descr;
   assert(self);
@@ -60,9 +60,11 @@ wizard_func(void *wizard_descr)
 	     oldroom->x, oldroom->y, newroom->x, newroom->y);
 
       /* Fill in */
-      
+      sem_wait(&newroom->sem_room);
       /* Self is active and has control over both rooms */
       switch_rooms(self, oldroom, newroom);
+
+      sem_post(&newroom->sem_room);
 
       other = find_opponent(self, newroom);
 
