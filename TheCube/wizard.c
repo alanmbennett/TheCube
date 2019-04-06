@@ -24,6 +24,8 @@ wizard_func(void *wizard_descr)
   /* Sets starting room */
   oldroom = cube->rooms[self->x][self->y];
   assert(oldroom);
+
+  sem_wait(&cube->start_sem); // wait for game to start
   
   /* Chooses the new room */
   newroom = choose_room(self);
@@ -34,12 +36,13 @@ wizard_func(void *wizard_descr)
       /* Loops until he's able to get a hold on both the old and new rooms */
       while (1)
       {
+          sem_wait(&cube->move_mutex);
           printf("Wizard %c%d in room (%d,%d) wants to go to room (%d,%d)\n",
                  self->team, self->id, oldroom->x, oldroom->y, newroom->x, newroom->y);
 	  
-
           if (try_room(self, oldroom, newroom)) // if wizard tries the room, but is full
           {
+              printf("Request denied, room (%d, %d) locked!\n", newroom->x, newroom->y);
               /* Waits a random amount of time */
               dostuff();
 	      
@@ -47,6 +50,11 @@ wizard_func(void *wizard_descr)
               newroom = choose_room(self);
 	      
               /* Loops back to try to go into the new room wizard wishes to enter */
+              if(cube->mode == 0)
+                  sem_post(&cube->move_mutex);
+              else
+                  sem_post(&cube->cmd_sem);
+              
               continue;
           }
           else // wizard is able to enter the room
@@ -60,12 +68,8 @@ wizard_func(void *wizard_descr)
 	     oldroom->x, oldroom->y, newroom->x, newroom->y);
 
       /* Fill in */
-      sem_wait(&newroom->room_sem);
-      
       /* Self is active and has control over both rooms */
       switch_rooms(self, oldroom, newroom);
-        
-      sem_post(&newroom->room_sem);
 
       other = find_opponent(self, newroom);
       
@@ -111,6 +115,11 @@ wizard_func(void *wizard_descr)
 
 	  /* Fill in */
       }
+        
+      if(cube->mode == 0)
+         sem_post(&cube->move_mutex);
+      else
+         sem_post(&cube->cmd_sem);
 
       /* Thinks about what to do next */
       dostuff();

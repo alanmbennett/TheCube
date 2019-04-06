@@ -2,18 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:/Users/Alan/Documents/USF/2019/Spring_2019/COP 4600/Project 3/TheCube/TheCube/cube.c">
-   </FileRef>
-   <FileRef
-      location = "group:/Users/Alan/Documents/USF/2019/Spring_2019/COP 4600/Project 3/TheCube/TheCube/cube.h">
-   </FileRef>
-   <FileRef
-      location = "group:/Users/Alan/Documents/USF/2019/Spring_2019/COP 4600/Project 3/TheCube/TheCube/wizard.c">
-   </FileRef>
-   <FileRef
-      location = "group:wizard.h">
-   </FileRef>
-   <FileRef
       location = "self:">
    </FileRef>
 </Workspace>

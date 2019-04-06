@@ -15,6 +15,7 @@ struct wizard {
   struct cube *cube; 
 
   /* Fill in as required */
+  
 };
   
 struct room {
@@ -23,8 +24,6 @@ struct room {
   struct wizard *wizards[2];
 
   /* Fill in as required */
-  sem_t room_sem;
-  sem_t mutex;
 };
 
 struct cube {
@@ -39,6 +38,10 @@ struct cube {
   struct room ***rooms;
 
   /* Fill in as required */
+  int mode;
+  sem_t start_sem; 
+  sem_t move_mutex; // ensures once a move is started, another thread won't interrupt it until that move is done
+  sem_t cmd_sem;
 };
 
 extern void print_wizard(struct wizard *);

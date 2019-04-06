@@ -179,6 +179,7 @@ interface(void *cube_ref)
   char *line;
   char *command;
   int i;
+  int just_started = 1;
 
   cube = (struct cube *)cube_ref;
   assert(cube);
@@ -217,15 +218,18 @@ interface(void *cube_ref)
           else
           {
               cube->game_status = 0;
+              sem_init(&cube->start_sem, 0, 0);
+              sem_init(&cube->move_mutex, 0, 1);
+              sem_init(&cube->cmd_sem, 0, 0);
+            
               /* Start the game */
-              /* Fill in */
               
+              /* Fill in */
               /* Arrays holding PIDs for all threads */
               pthread_t teamA_pids[cube->teamA_size];
               pthread_t teamB_pids[cube->teamB_size];
               
               /* Spawn all the wizard threads */
-              int i;
               
               for(i = 0; i < cube->teamA_size; i++)
               {
@@ -236,6 +240,48 @@ interface(void *cube_ref)
               {
                   pthread_create(&teamB_pids[i], NULL, wizard_func, cube->teamB_wizards[i]);
               }
+          }
+      }
+      else if(!strcmp(command, "s"))
+      {
+          cube->mode = 1;
+          
+          if(just_started == 1)
+          {
+              for(i = 0; i < (cube->teamA_size + cube->teamB_size); i++)
+              {
+                  sem_post(&cube->start_sem);
+              }
+              
+              just_started = 0;
+              
+              sem_wait(&cube->cmd_sem);
+          }
+         else
+         {
+             sem_post(&cube->move_mutex);
+             sem_wait(&cube->cmd_sem);
+         }
+      }
+      else if(!strcmp(command,"c"))
+      {
+          cube->mode = 0;
+          
+          if(just_started == 1)
+          {
+              for(i = 0; i < (cube->teamA_size + cube->teamB_size); i++)
+              {
+                  sem_post(&cube->start_sem);
+              }
+              
+              just_started = 0;
+              
+              sem_wait(&cube->cmd_sem);
+          }
+          else
+          {
+              sem_post(&cube->move_mutex);
+              sem_wait(&cube->cmd_sem);
           }
       }
       else if (!strcmp(command, "stop"))
@@ -388,8 +434,6 @@ main(int argc, char** argv)
 	  room_col[j] = room;
 
 	  /* Fill in */
-     sem_init(&room->room_sem, 0, 2);
-     sem_init(&room->mutex, 0, 1);
 
 	}
       
@@ -430,9 +474,8 @@ main(int argc, char** argv)
 	}
       cube->teamB_wizards[i] = wizard_descr;
     }
-
-  /* Fill in */
-  
+    
+    /* fill in */
 
   /* Goes in the interface loop */
   res = interface(cube);
@@ -508,8 +551,6 @@ void
 switch_rooms(struct wizard *w, struct room *oldroom, struct room* newroom)
 {
   struct wizard *other;
-    
-  sem_wait(&newroom->mutex);
 
   /* Removes self from old room */
   if (oldroom->wizards[0] == w)
@@ -551,8 +592,6 @@ switch_rooms(struct wizard *w, struct room *oldroom, struct room* newroom)
   /* Sets self's location to current room */
   w->x = newroom->x;
   w->y = newroom->y;
-    
-  sem_post(&newroom->mutex);
 }
 
 int 
@@ -571,8 +610,8 @@ fight_wizard(struct wizard *self, struct wizard *other, struct room *room)
 	     other->team, other->id);
 
       /* Fill in */
-
-
+        other->status = 1; // frozen
+        
     }
 
   /* Self freezes and release the lock */
@@ -584,6 +623,7 @@ fight_wizard(struct wizard *self, struct wizard *other, struct room *room)
 	     other->team, other->id);
 
       /* Fill in */
+        self->status = 1;
 
       return 1;
     }
@@ -606,7 +646,9 @@ free_wizard(struct wizard *self, struct wizard *other, struct room* room)
 	     other->team, other->id);
 
       /* Fill in */
-      
+        other->status = 1;
+        
+        return 1;
     }
 
   /* The spell failed */
