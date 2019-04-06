@@ -388,7 +388,8 @@ main(int argc, char** argv)
 	  room_col[j] = room;
 
 	  /* Fill in */
-    sem_init(&room->sem_room, 0, 1);
+     sem_init(&room->room_sem, 0, 2);
+     sem_init(&room->mutex, 0, 1);
 
 	}
       
@@ -476,9 +477,9 @@ int
 try_room(struct wizard *w, struct room *oldroom, struct room* newroom)
 {
   /* Fill in */
-  if(newroom->wizards[0] != NULL)
+  if(newroom->wizards[0] == NULL)
     return 0; // not full
-  else if(newroom->wizards[1] != NULL)
+  else if(newroom->wizards[1] == NULL)
     return 0; // not full
 
   return 1; // is full
@@ -507,6 +508,8 @@ void
 switch_rooms(struct wizard *w, struct room *oldroom, struct room* newroom)
 {
   struct wizard *other;
+    
+  //sem_wait(&newroom->mutex);
 
   /* Removes self from old room */
   if (oldroom->wizards[0] == w)
@@ -526,7 +529,6 @@ switch_rooms(struct wizard *w, struct room *oldroom, struct room* newroom)
     }
 
   /* Fill in */
-
   /* Updates room wizards and determines opponent */
   if (newroom->wizards[0] == NULL)
     {
@@ -549,6 +551,8 @@ switch_rooms(struct wizard *w, struct room *oldroom, struct room* newroom)
   /* Sets self's location to current room */
   w->x = newroom->x;
   w->y = newroom->y;
+    
+  //sem_post(&newroom->mutex);
 }
 
 int 

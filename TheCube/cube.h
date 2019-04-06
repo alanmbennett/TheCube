@@ -23,7 +23,8 @@ struct room {
   struct wizard *wizards[2];
 
   /* Fill in as required */
-  sem_t sem_room;
+  sem_t room_sem;
+  //sem_t mutex;
 };
 
 struct cube {

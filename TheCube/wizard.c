@@ -60,13 +60,15 @@ wizard_func(void *wizard_descr)
 	     oldroom->x, oldroom->y, newroom->x, newroom->y);
 
       /* Fill in */
-      sem_wait(&newroom->sem_room);
+      sem_wait(&newroom->room_sem);
+      
       /* Self is active and has control over both rooms */
       switch_rooms(self, oldroom, newroom);
-
-      sem_post(&newroom->sem_room);
+        
+      sem_post(&newroom->room_sem);
 
       other = find_opponent(self, newroom);
+      
 
       /* If there is not another wizard does nothing */
       if (other == NULL)
