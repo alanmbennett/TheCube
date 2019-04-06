@@ -37,6 +37,21 @@ wizard_func(void *wizard_descr)
       while (1)
       {
           sem_wait(&cube->move_mutex);
+          
+          if(self->status == 1)
+          {
+              printf("Wizard %c%d in room (%d,%d) is frozen in place.\n",
+                     self->team, self->id, oldroom->x, oldroom->y);
+              
+              if(cube->mode == 0)
+                  sem_post(&cube->move_mutex);
+              else
+                  sem_post(&cube->cmd_sem);
+              
+              continue;
+          }
+          
+          
           printf("Wizard %c%d in room (%d,%d) wants to go to room (%d,%d)\n",
                  self->team, self->id, oldroom->x, oldroom->y, newroom->x, newroom->y);
 	  

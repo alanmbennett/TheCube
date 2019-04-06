@@ -37,8 +37,34 @@ int
 check_winner(struct cube* cube)
 {
   /* Fill in */
-
-  return 0;
+    int win = 1; // win is true
+    int i;
+    
+    for(i = 0; i < cube->teamA_size; i++)
+    {
+        if(cube->teamA_wizards[i]->status == 0)
+        {
+            win = 0; // win is false
+            break;
+        }
+    }
+    
+    if(win == 1)
+        return 2; // 2 = Team B wins
+    
+    for(i = 0; i < cube->teamB_size; i++)
+    {
+        if(cube->teamB_wizards[i]->status == 0)
+        {
+            win = 0; // win is false
+            break;
+        }
+    }
+  
+    if(win == 1)
+        return 1; // 1 = Team A wins
+    
+  return 0; // 0 = no winner yet
 }
 
 void 
@@ -662,7 +688,7 @@ free_wizard(struct wizard *self, struct wizard *other, struct room* room)
 	     other->team, other->id);
 
       /* Fill in */
-        other->status = 1;
+        other->status = 0;
         
         return 1;
     }
