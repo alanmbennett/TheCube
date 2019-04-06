@@ -509,7 +509,7 @@ switch_rooms(struct wizard *w, struct room *oldroom, struct room* newroom)
 {
   struct wizard *other;
     
-  //sem_wait(&newroom->mutex);
+  sem_wait(&newroom->mutex);
 
   /* Removes self from old room */
   if (oldroom->wizards[0] == w)
@@ -552,7 +552,7 @@ switch_rooms(struct wizard *w, struct room *oldroom, struct room* newroom)
   w->x = newroom->x;
   w->y = newroom->y;
     
-  //sem_post(&newroom->mutex);
+  sem_post(&newroom->mutex);
 }
 
 int 

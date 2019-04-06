@@ -24,7 +24,7 @@ struct room {
 
   /* Fill in as required */
   sem_t room_sem;
-  //sem_t mutex;
+  sem_t mutex;
 };
 
 struct cube {
