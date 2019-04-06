@@ -246,7 +246,15 @@ interface(void *cube_ref)
       {
           cube->mode = 1;
           
-          if(just_started == 1)
+          if(cube->game_status == -1)
+          {
+              fprintf(stderr, "Game has not begun yet. Use 'start' to begin it first.\n");
+          }
+          else if (cube->game_status == 1)
+          {
+              fprintf(stderr, "Game is over. Cannot execute step-by-step on completed game.\n");
+          }
+          else if(just_started == 1)
           {
               for(i = 0; i < (cube->teamA_size + cube->teamB_size); i++)
               {
@@ -267,7 +275,15 @@ interface(void *cube_ref)
       {
           cube->mode = 0;
           
-          if(just_started == 1)
+          if(cube->game_status == -1)
+          {
+              fprintf(stderr, "Game has not begun yet. Use 'start' to begin it first.\n");
+          }
+          else if (cube->game_status == 1)
+          {
+              fprintf(stderr, "Game is over. Cannot execute continuously on completed game.\n");
+          }
+          else if(just_started == 1)
           {
               for(i = 0; i < (cube->teamA_size + cube->teamB_size); i++)
               {
