@@ -46,9 +46,6 @@ wizard_func(void *wizard_descr)
           
           if(self->status == 1)
           {
-              printf("Wizard %c%d in room (%d,%d) is frozen in place.\n",
-                     self->team, self->id, oldroom->x, oldroom->y);
-              
               if(cube->mode == 0)
                   sem_post(&cube->move_mutex);
               else
