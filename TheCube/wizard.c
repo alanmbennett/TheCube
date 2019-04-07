@@ -40,6 +40,7 @@ wizard_func(void *wizard_descr)
 
           if(cube->game_status == 1)
           {
+              sem_post(&cube->move_mutex);
               kill_wizards(self);
               sem_wait(&cube->demise_sem);
           }
@@ -60,7 +61,7 @@ wizard_func(void *wizard_descr)
 	  
           if (try_room(self, oldroom, newroom)) // if wizard tries the room, but is full
           {
-              printf("Request denied, room (%d, %d) locked!\n", newroom->x, newroom->y);
+              printf("Request denied, room (%d,%d) locked!\n", newroom->x, newroom->y);
               /* Waits a random amount of time */
               dostuff();
 	      
@@ -116,20 +117,18 @@ wizard_func(void *wizard_descr)
                   fight_wizard(self, other, newroom);
 
                   int winner = check_winner(cube);
-
-                  if(winner == 1)
+                  
+                  if(winner == 1 || winner == 2)
                   {
-                      printf("Team A Wins!\n");
                       cube->game_status = 1;
+                      
+                      if(winner == 1)
+                          printf("Team A Wins!\n");
+                      else
+                          printf("Team B Wins\n");
+                      
                       print_cube(cube);
-                      sem_post(&cube->cmd_sem);
-                      continue;
-                  }
-                  else if(winner == 2)
-                  {
-                      printf("Team B Wins\n");
-                      cube->game_status = 1;
-                      print_cube(cube);
+                      sem_post(&cube->move_mutex);
                       sem_post(&cube->cmd_sem);
                       continue;
                   }
