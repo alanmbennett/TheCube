@@ -28,7 +28,7 @@ void
 kill_wizards(struct wizard *w)
 {
   /* Fill in */
-
+  pthread_cancel(w->pid);
 
   return;
 }
@@ -51,6 +51,8 @@ check_winner(struct cube* cube)
     
     if(win == 1)
         return 2; // 2 = Team B wins
+
+    win = 1;
     
     for(i = 0; i < cube->teamB_size; i++)
     {
@@ -212,7 +214,7 @@ interface(void *cube_ref)
 
   using_history();
   while (1)
-  {
+  { 
       line = readline("cube> ");
       if (line == NULL) continue;
       if (strlen(line) == 0) continue;
@@ -247,24 +249,22 @@ interface(void *cube_ref)
               sem_init(&cube->start_sem, 0, 0);
               sem_init(&cube->move_mutex, 0, 1);
               sem_init(&cube->cmd_sem, 0, 0);
+              sem_init(&cube->demise_sem, 0, 0);
             
               /* Start the game */
               
               /* Fill in */
-              /* Arrays holding PIDs for all threads */
-              pthread_t teamA_pids[cube->teamA_size];
-              pthread_t teamB_pids[cube->teamB_size];
               
               /* Spawn all the wizard threads */
               
               for(i = 0; i < cube->teamA_size; i++)
               {
-                  pthread_create(&teamA_pids[i], NULL, wizard_func, cube->teamA_wizards[i]);
+                  pthread_create(&cube->teamA_wizards[i]->pid, NULL, wizard_func, cube->teamA_wizards[i]);
               }
               
               for(i = 0; i < cube->teamB_size; i++)
               {
-                  pthread_create(&teamB_pids[i], NULL, wizard_func, cube->teamB_wizards[i]);
+                  pthread_create(&cube->teamB_wizards[i]->pid, NULL, wizard_func, cube->teamB_wizards[i]);
               }
           }
       }

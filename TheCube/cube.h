@@ -15,7 +15,7 @@ struct wizard {
   struct cube *cube; 
 
   /* Fill in as required */
-  
+  pthread_t pid; 
 };
   
 struct room {
@@ -42,6 +42,7 @@ struct cube {
   sem_t start_sem; 
   sem_t move_mutex; // ensures once a move is started, another thread won't interrupt it until that move is done
   sem_t cmd_sem;
+  sem_t demise_sem; // awaits their demise
 };
 
 extern void print_wizard(struct wizard *);

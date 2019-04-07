@@ -37,6 +37,12 @@ wizard_func(void *wizard_descr)
       while (1)
       {
           sem_wait(&cube->move_mutex);
+
+          if(cube->game_status == 1)
+          {
+              kill_wizards(self);
+              sem_wait(&cube->demise_sem);
+          }
           
           if(self->status == 1)
           {
@@ -111,6 +117,25 @@ wizard_func(void *wizard_descr)
                          self->team, self->id, newroom->x, newroom->y);
 
                   fight_wizard(self, other, newroom);
+
+                  int winner = check_winner(cube);
+
+                  if(winner == 1)
+                  {
+                      printf("Team A Wins!\n");
+                      cube->game_status = 1;
+                      print_cube(cube);
+                      sem_post(&cube->cmd_sem);
+                      continue;
+                  }
+                  else if(winner == 2)
+                  {
+                      printf("Team B Wins\n");
+                      cube->game_status = 1;
+                      print_cube(cube);
+                      sem_post(&cube->cmd_sem);
+                      continue;
+                  }
               }
               else
               {
